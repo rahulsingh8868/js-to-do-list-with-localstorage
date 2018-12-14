@@ -1,0 +1,215 @@
+<html>
+    <head>
+        <script>
+            var i=0,flagValidateData=0,j=0,flagValidateId=-1,k=0,l=0;
+            var array=[];
+            function checkEmpty()
+            {
+                var data=localStorage["0"];
+                console.log(data);
+                if(data)
+                    {
+                        console.log('hello');
+                        array=JSON.parse(data);
+                        for(i=0;i<array.length;i++)
+                            {
+                                var li=document.createElement('li');
+                                var t=document.createTextNode(array[i].task);
+                                console.log(array[i].task);
+                                //console.log(array[i].id);
+                                var nbtn=document.createElement('input');
+                                nbtn.setAttribute("type","button");
+                                nbtn.setAttribute("value","remove");
+                                nbtn.setAttribute("id",array[i].id);
+                                nbtn.setAttribute("onclick","removefn(id)");
+                                var edit=document.createElement('input');
+                                edit.setAttribute("type","button");
+                                edit.setAttribute("value","edit");
+                                edit.setAttribute("id",array[i].id);
+                                edit.setAttribute("onclick","rename(id)");
+                                li.setAttribute("id","b"+array[i].id);
+                                li.appendChild(t);
+                                li.appendChild(edit);
+                                li.appendChild(nbtn);
+                                document.getElementById("myUL").appendChild(li);
+                            }
+                    }
+                //var data=localstorage.getItem["0"];
+                //console.log(data);
+            }
+            window.onload=function(){
+                checkEmpty();
+            }
+            
+            
+            function objectOfArray(id,task)
+            {
+                console.log('this.id'+id);
+                this.id=id;
+                this.task=task;
+            }
+            function fn(){
+                var inputVal =document.getElementById("textbox").value;
+                validateData(inputVal);
+                if(flagValidateData==1)
+                    {
+                        return;
+                    }
+                var li=document.createElement('li');
+                var t=document.createTextNode(inputVal);
+                var nbtn=document.createElement('input');
+                nbtn.setAttribute("type","button");
+                nbtn.setAttribute("value","remove");
+                nbtn.setAttribute("id",i);
+                nbtn.setAttribute("onclick","removefn(id)");
+                var edit=document.createElement('input');
+                edit.setAttribute("type","button");
+                edit.setAttribute("value","edit");
+                edit.setAttribute("onclick","rename(id)");
+                if(flagValidateId==1)
+                    {
+                        li.setAttribute("id","b"+k);
+                        edit.setAttribute("id",k);
+                        console.log("flagValidateId = 1 "+k);
+                        l=parseInt(k);
+                        var obj=new objectOfArray(l,inputVal);
+                        array[l]=obj;
+                        flagValidateId=-1;
+                    }
+                else if(flagValidateId==-1)
+                    {
+                        li.setAttribute("id","b"+i);
+                        edit.setAttribute("id",i);
+                        console.log("flagValidateId = -1 "+i);
+                        l=i;
+                        i++;
+                        var obj=new objectOfArray(l,inputVal);
+                        array.push(obj);
+                    }
+                console.log(obj);
+                //storeData(obj);
+                //console.log(obj.id+" "+obj.task);
+                li.appendChild(t);
+                li.appendChild(edit);
+                li.appendChild(nbtn);
+                document.getElementById("myUL").appendChild(li);
+                storeData(array);
+                //array.push(inputVal);
+                /*j++;
+                if(j==5)
+                    {
+                        storeData(array);
+                        j=0;
+                    }*/
+            }
+            function storeData(array1)
+            {
+                var z=0;
+                //var newArr=[]; 
+                localStorage.setItem(z,JSON.stringify(array1));
+                //localStorage.array=;
+                z++;
+                var data=localStorage["0"];
+                console.log(data);
+            }
+            function validateData(inputVal)
+            {
+                if(inputVal=="" || inputVal.length<3 || inputVal.length>10)
+                    {
+                        alert("please enter valid name");
+                        flagValidateData=1;
+                    }
+                else
+                {
+                    console.log('name is valid');
+                    //alert("name is valid");
+                    flagValidateData=0;
+                }
+            }
+            function removefn(id)
+            {
+                alert(id);
+                var x="b"+id;
+                alert(x);
+                flagValidateId=1;
+                k=id;
+                //var list=document.getElementById("myUL");
+                //list.removeChild(list.childNodes[x]);
+                var element=document.getElementById(x);
+                console.log(element);
+                //var elementValue=element.nodeValue;
+                //console.log(elementValue);
+                element.parentNode.removeChild(element);
+                var iterator=0;
+                for(iterator=0;iterator<array.length;iterator++)
+                    {
+                        if(array[iterator].id==k)
+                            {
+                                array.splice(iterator,1);
+                                storeData(array);
+                                break;
+                            }
+                    }
+                //localStorage.clear();
+            }
+            function rename(id)
+            {
+                alert(id);
+                var x="b"+id;
+                //var newName=prompt("Enter correct name","");
+                var textNode=document.createElement('input');
+                textNode.setAttribute("id","*");
+                var element=document.getElementById(x);
+                //element.childNodes[0].nodeValue=newName;
+                var valueChildNode=element.childNodes[0].nodeValue;
+                //textNode.setAttribute("value",element.childNodes[0].nodeValue);
+                //element.replaceChild(element.childNodes[0],textNode);
+                element.removeChild(element.childNodes[0]);
+                element.appendChild(textNode);
+                //console.log(newName);
+                textNode.addEventListener('keyup',function(e){
+                if(e.keyCode==13)
+                {
+                    console.log(newName);
+                    console.log(element);
+                    var newName=document.getElementById("*").value;
+                    var tNode=document.createTextNode(newName);
+                    element.removeChild(element.childNodes[2]);
+                    element.insertBefore(tNode,element.childNodes[0]);
+                    console.log('rename function');
+                    console.log('id = '+id);
+                    console.log('newName = '+newName);
+                    //localStorage.clear();
+                    var t=parseInt(id);
+                    var obj = new objectOfArray(t,newName);
+                    array[t]=obj;
+                    storeData(array);
+                }
+                });
+                /*if(newName!=null)
+                {
+                    alert('hellooo');
+                    console.log(element);
+                    //console.log(newName);
+                    /*var tNode=document.createTextNode(newName);
+                    element.removeChild(element.childNodes[2]);
+                    element.appendChild(tNode);
+                    //console.log("Can't be changed once filled");
+                    
+                }
+                else
+                {
+                    alert("Name can't be empty");
+                }*/
+            }
+        </script>
+    </head>
+    <body>
+        <input type="text" id="textbox" value="dinput">
+        <button type="button" id="btn" onclick="fn()">try it</button>
+        <div id="list">
+            <ul id="myUL">
+            </ul>
+        </div>
+    </body>
+</html>
